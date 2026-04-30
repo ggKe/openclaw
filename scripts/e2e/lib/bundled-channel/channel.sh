@@ -45,7 +45,7 @@ bundled_channel_install_package /tmp/openclaw-install.log
 
 command -v openclaw >/dev/null
 package_root="$(openclaw_e2e_package_root)"
-openclaw_e2e_assert_package_extensions "$package_root" telegram discord slack feishu memory-lancedb
+openclaw_e2e_assert_package_extensions "$package_root" telegram discord slack feishu memory-lancedb memory-milvus
 
 if [ -d "$package_root/dist/extensions/$CHANNEL/node_modules" ]; then
   echo "$CHANNEL runtime deps should not be preinstalled in package" >&2
@@ -108,8 +108,8 @@ parse_channel_status_json() {
 
 assert_channel_status() {
   local channel="$1"
-  if [ "$channel" = "memory-lancedb" ]; then
-    echo "memory-lancedb plugin activation verified by dependency sentinel"
+  if [ "$channel" = "memory-lancedb" ] || [ "$channel" = "memory-milvus" ]; then
+    echo "$channel plugin activation verified by dependency sentinel"
     return 0
   fi
   local out="/tmp/openclaw-channel-status-$channel.json"

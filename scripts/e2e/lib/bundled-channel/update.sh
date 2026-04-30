@@ -11,7 +11,7 @@ run_update_scenario() {
     "$DOCKER_UPDATE_RUN_TIMEOUT" \
     bundled-channel-update \
     -e OPENCLAW_BUNDLED_CHANNEL_UPDATE_BASELINE_VERSION="$UPDATE_BASELINE_VERSION" \
-    -e "OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS=${OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS:-telegram,discord,slack,feishu,memory-lancedb,acpx}" \
+    -e "OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS=${OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS:-telegram,discord,slack,feishu,memory-lancedb,memory-milvus,acpx}" \
     "${DOCKER_E2E_PACKAGE_ARGS[@]}" \
     -i "$IMAGE_NAME" bash -s <<'EOF'
 set -euo pipefail
@@ -28,7 +28,7 @@ export OPENCLAW_BUNDLED_CHANNEL_MEMORY_DB_PATH="~/.openclaw/memory/lancedb-updat
 
 TOKEN="bundled-channel-update-token"
 PORT="18790"
-UPDATE_TARGETS="${OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS:-telegram,discord,slack,feishu,memory-lancedb,acpx}"
+UPDATE_TARGETS="${OPENCLAW_BUNDLED_CHANNEL_UPDATE_TARGETS:-telegram,discord,slack,feishu,memory-lancedb,memory-milvus,acpx}"
 
 poison_home_npm_project() {
   printf '{"name":"openclaw-home-prefix-poison","private":true}\n' >"$HOME/package.json"
@@ -160,6 +160,17 @@ if should_run_update_target memory-lancedb; then
   cat /tmp/openclaw-update-memory-lancedb.json
   assert_update_ok /tmp/openclaw-update-memory-lancedb.json "$candidate_version"
   bundled_channel_assert_dep_available memory-lancedb @lancedb/lancedb
+fi
+
+if should_run_update_target memory-milvus; then
+  echo "Mutating config to memory-milvus and rerunning same-version update path..."
+  bundled_channel_write_config memory-milvus
+  bundled_channel_remove_runtime_dep memory-milvus @zilliz/milvus2-sdk-node
+  bundled_channel_assert_no_dep_available memory-milvus @zilliz/milvus2-sdk-node
+  run_update_and_capture memory-milvus /tmp/openclaw-update-memory-milvus.json
+  cat /tmp/openclaw-update-memory-milvus.json
+  assert_update_ok /tmp/openclaw-update-memory-milvus.json "$candidate_version"
+  bundled_channel_assert_dep_available memory-milvus @zilliz/milvus2-sdk-node
 fi
 
 if should_run_update_target acpx; then

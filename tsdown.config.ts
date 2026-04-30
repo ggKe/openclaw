@@ -125,6 +125,8 @@ const bundledPluginRoot = (pluginId: string) => ["extensions", pluginId].join("/
 const bundledPluginFile = (pluginId: string, relativePath: string) =>
   `${bundledPluginRoot(pluginId)}/${relativePath}`;
 const explicitNeverBundleDependencies = [
+  "@grpc/grpc-js",
+  "@grpc/proto-loader",
   "@lancedb/lancedb",
   "@matrix-org/matrix-sdk-crypto-nodejs",
   "matrix-js-sdk",

@@ -1,0 +1,162 @@
+{
+  "id": "memory-milvus",
+  "activation": {
+    "onStartup": false
+  },
+  "kind": "memory",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "embedding": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiKey": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "baseUrl": {
+            "type": "string"
+          },
+          "dimensions": {
+            "type": "number"
+          },
+          "clientType": {
+            "type": "string",
+            "enum": ["openapi-client", "rest"]
+          }
+        },
+        "required": ["apiKey"]
+      },
+      "milvus": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "collectionName": {
+            "type": "string"
+          },
+          "secure": {
+            "type": "boolean"
+          }
+        },
+        "required": ["address"]
+      },
+      "autoCapture": {
+        "type": "boolean"
+      },
+      "autoRecall": {
+        "type": "boolean"
+      },
+      "captureMaxChars": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 10000
+      },
+      "recallMaxChars": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 10000
+      }
+    },
+    "required": ["embedding", "milvus"]
+  },
+  "uiHints": {
+    "embedding.apiKey": {
+      "label": "OpenAI API Key",
+      "sensitive": true,
+      "placeholder": "sk-proj-...",
+      "help": "API key for OpenAI embeddings (or use ${OPENAI_API_KEY})"
+    },
+    "embedding.model": {
+      "label": "Embedding Model",
+      "placeholder": "text-embedding-3-small",
+      "help": "OpenAI embedding model to use"
+    },
+    "embedding.baseUrl": {
+      "label": "Base URL",
+      "placeholder": "https://api.openai.com/v1",
+      "help": "Base URL for compatible providers (e.g. http://localhost:11434/v1)",
+      "advanced": true
+    },
+    "embedding.dimensions": {
+      "label": "Dimensions",
+      "placeholder": "1536",
+      "help": "Vector dimensions for custom models (required for non-standard models)",
+      "advanced": true
+    },
+    "embedding.clientType": {
+      "label": "Client Type",
+      "placeholder": "openapi-client",
+      "help": "Client type to use for embeddings: 'openapi-client' (uses OpenAI SDK) or 'rest' (uses direct HTTP requests)",
+      "advanced": true
+    },
+    "milvus.address": {
+      "label": "Milvus Address",
+      "placeholder": "localhost:19530",
+      "help": "Milvus server address (host:port)"
+    },
+    "milvus.username": {
+      "label": "Milvus Username",
+      "placeholder": "root",
+      "help": "Milvus authentication username (requires password)"
+    },
+    "milvus.password": {
+      "label": "Milvus Password",
+      "sensitive": true,
+      "placeholder": "your-password",
+      "help": "Milvus authentication password (requires username)"
+    },
+    "milvus.token": {
+      "label": "Milvus Token",
+      "sensitive": true,
+      "placeholder": "your-token",
+      "help": "Milvus API token (mutually exclusive with username/password)"
+    },
+    "milvus.collectionName": {
+      "label": "Collection Name",
+      "placeholder": "openclaw_memories",
+      "help": "Milvus collection name for storing memories",
+      "advanced": true
+    },
+    "milvus.secure": {
+      "label": "Use TLS",
+      "help": "Enable TLS/SSL for Milvus connection",
+      "advanced": true
+    },
+    "autoCapture": {
+      "label": "Auto-Capture",
+      "help": "Automatically capture important information from conversations"
+    },
+    "autoRecall": {
+      "label": "Auto-Recall",
+      "help": "Automatically inject relevant memories into context"
+    },
+    "captureMaxChars": {
+      "label": "Capture Max Chars",
+      "help": "Maximum message length eligible for auto-capture",
+      "advanced": true,
+      "placeholder": "500"
+    },
+    "recallMaxChars": {
+      "label": "Recall Query Max Chars",
+      "help": "Maximum prompt/query length embedded for memory recall. Lower for small local embedding models.",
+      "advanced": true,
+      "placeholder": "1000"
+    }
+  }
+}

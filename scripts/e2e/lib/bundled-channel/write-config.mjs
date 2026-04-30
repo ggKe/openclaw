@@ -140,6 +140,37 @@ if (mode === "memory-lancedb") {
     },
   };
 }
+if (mode === "memory-milvus") {
+  config.plugins = {
+    ...config.plugins,
+    enabled: true,
+    allow: [...new Set([...(config.plugins?.allow || []), "memory-milvus"])],
+    slots: {
+      ...config.plugins?.slots,
+      memory: "memory-milvus",
+    },
+    entries: {
+      ...config.plugins?.entries,
+      "memory-milvus": {
+        ...config.plugins?.entries?.["memory-milvus"],
+        enabled: true,
+        config: {
+          ...config.plugins?.entries?.["memory-milvus"]?.config,
+          embedding: {
+            ...config.plugins?.entries?.["memory-milvus"]?.config?.embedding,
+            apiKey: process.env.OPENAI_API_KEY,
+            model: "text-embedding-3-small",
+          },
+          milvus: {
+            address: "localhost:19530",
+          },
+          autoCapture: false,
+          autoRecall: false,
+        },
+      },
+    },
+  };
+}
 if (mode === "acpx") {
   config.plugins = {
     ...config.plugins,

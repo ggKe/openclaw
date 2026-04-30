@@ -47,7 +47,7 @@ run_bundled_channel_container_with_state_heartbeat() {
 
 run_bundled_channel_runtime_dep_scenarios() {
   if [ "$RUN_CHANNEL_SCENARIOS" != "0" ]; then
-    IFS=',' read -r -a CHANNEL_SCENARIOS <<<"${OPENCLAW_BUNDLED_CHANNELS:-${CHANNEL_ONLY:-telegram,discord,slack,feishu,memory-lancedb}}"
+    IFS=',' read -r -a CHANNEL_SCENARIOS <<<"${OPENCLAW_BUNDLED_CHANNELS:-${CHANNEL_ONLY:-telegram,discord,slack,feishu,memory-lancedb,memory-milvus}}"
     for channel_scenario in "${CHANNEL_SCENARIOS[@]}"; do
       channel_scenario="${channel_scenario//[[:space:]]/}"
       [ -n "$channel_scenario" ] || continue
@@ -57,6 +57,7 @@ run_bundled_channel_runtime_dep_scenarios() {
       slack) run_channel_scenario slack @slack/web-api ;;
       feishu) run_channel_scenario feishu @larksuiteoapi/node-sdk ;;
       memory-lancedb) run_channel_scenario memory-lancedb @lancedb/lancedb ;;
+      memory-milvus) run_channel_scenario memory-milvus @zilliz/milvus2-sdk-node ;;
       *)
         echo "Unsupported OPENCLAW_BUNDLED_CHANNELS entry: $channel_scenario" >&2
         exit 1

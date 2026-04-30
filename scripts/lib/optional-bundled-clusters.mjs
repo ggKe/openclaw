@@ -5,6 +5,7 @@ export const optionalBundledClusters = [
   "googlechat",
   "matrix",
   "memory-lancedb",
+  "memory-milvus",
   "msteams",
   "nostr",
   "tlon",

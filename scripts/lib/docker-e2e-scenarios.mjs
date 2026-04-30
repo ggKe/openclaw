@@ -115,7 +115,7 @@ function bundledChannelScenarioLane(name, env, options = {}) {
   );
 }
 
-const bundledChannelSmokeLanes = ["telegram", "discord", "slack", "feishu", "memory-lancedb"].map(
+const bundledChannelSmokeLanes = ["telegram", "discord", "slack", "feishu", "memory-lancedb", "memory-milvus"].map(
   (channel) =>
     npmLane(
       `bundled-channel-${channel}`,
@@ -130,6 +130,7 @@ const bundledChannelUpdateLanes = [
   "slack",
   "feishu",
   "memory-lancedb",
+  "memory-milvus",
   "acpx",
 ].map((target) =>
   bundledChannelScenarioLane(
